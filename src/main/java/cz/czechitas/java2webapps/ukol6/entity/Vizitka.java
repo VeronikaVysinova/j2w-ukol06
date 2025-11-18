@@ -53,18 +53,6 @@ public class Vizitka {
     public Vizitka(){ //bezparam. konstruktor
     }
 
-    //param. konstruktor
-    public Vizitka (Integer id,String celeJmeno,String firma,String ulice,String obec,String psc,String email,String telefon, String web){
-        this.id = id;
-        this.celeJmeno = celeJmeno;
-        this.firma = firma;
-        this.ulice = ulice;
-        this.obec = obec;
-        this.psc = psc;
-        this.email = email;
-        this.telefon = telefon;
-        this.web = web;
-    }
 
     public Integer getId(){ return id;}
 

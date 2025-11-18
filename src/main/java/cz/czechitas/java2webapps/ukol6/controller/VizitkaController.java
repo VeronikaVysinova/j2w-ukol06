@@ -2,6 +2,7 @@ package cz.czechitas.java2webapps.ukol6.controller;
 
 
 import cz.czechitas.java2webapps.ukol6.entity.Vizitka;
+import cz.czechitas.java2webapps.ukol6.repository.VizitkaRepository;
 import cz.czechitas.java2webapps.ukol6.service.VizitkaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class VizitkaController {
 
     @Autowired
     public VizitkaController(VizitkaService vizitkaService) {
-        this.vizitkaService = vizitkaService;
+        this.vizitkaService = vizitkaService; //ulozeni repository do fieldu
     }
 
     @InitBinder
@@ -26,28 +27,10 @@ public class VizitkaController {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
 
-    @GetMapping ("/")
+    @GetMapping("/")
     public ModelAndView seznam() {
-      return new ModelAndView("seznam")
-                .addObject("vizitky", vizitkaService.seznamVsech());
+        return new ModelAndView("seznam")
+                .addObject("seznam", vizitkaService.seznamVsech());
     }
-
-    @GetMapping("/detail/{id}")
-    public ModelAndView detail(@PathVariable int id) {
-        return new ModelAndView("vizitka")
-                .addObject("detail", vizitkaService.detailVizitka(id));
-    }
-
-    @PostMapping("/nova")
-    public String pridat(@ModelAttribute("vizitka") @Valid Vizitka vizitka, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "detail";
-        }
-        vizitkaService.pridat(vizitka);
-        return "redirect:/";
-    }
-
-
-
 
 }
