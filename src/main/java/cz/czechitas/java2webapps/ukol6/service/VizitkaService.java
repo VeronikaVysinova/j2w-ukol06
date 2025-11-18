@@ -6,6 +6,8 @@ import cz.czechitas.java2webapps.ukol6.repository.VizitkaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class VizitkaService {
 
@@ -26,9 +28,10 @@ public class VizitkaService {
         return vizitka;
     }
 
-    public Vizitka detailVizitka(int id){
-        return vizitkaRepository.getById(id);
+    public Optional<Vizitka> detailPodleId(int id) {
+        return vizitkaRepository.findById(id);
     }
+
 
     public Iterable<Vizitka> seznamVsech(){
         return vizitkaRepository.findAll();
