@@ -27,25 +27,38 @@ public class VizitkaController {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
 
-    @GetMapping("/")
+    @GetMapping("/") //zobrazi seznam vsech vizitek z databaze
     public ModelAndView seznam() {
-        return new ModelAndView("seznam")
-                .addObject("seznam", vizitkaService.seznamVsech());
+        return new ModelAndView("seznam") //vytvori MAV a preda se sablona seznam.ftlh
+                .addObject("seznam", vizitkaService.seznamVsech()); // do modelu se prida objekt seznam, ktery zobrazi vsechny dostupne vizitky z databaze
     }
 
-    @GetMapping("/detail/{id}")
-    public Object detail(@PathVariable int id) {
-        Optional<Vizitka> optionalVizitka = vizitkaService.detailPodleId(id);
-        if (optionalVizitka.isPresent()) {
-            Vizitka vizitka = optionalVizitka.get();
-            return new ModelAndView("vizitka")
-                    .addObject("vizitka", vizitka);
+    @GetMapping("/detail/{id}") //URL pozadavek ve formatu /detail/{id}
+    public Object detail(@PathVariable int id) { //id se ziska z URL a preda se metode jako cislo
+        Optional<Vizitka> optionalVizitka = vizitkaService.detailPodleId(id); //kontejner - obsahuje bud hodnotu nebo je prazdny, vola se sluzba vizitkaService -> vraci Optional<Vizitka>
+        if (optionalVizitka.isPresent()) { //kontrola - vraci true, pokud Optional obsahuje hodnotu, pokud existuje vizitka -> zobrazi se
+            Vizitka vizitka = optionalVizitka.get(); // z Optional se ziska Vizitka
+            return new ModelAndView("vizitka") // vytvori se ModelAndView a preda se sablona vizitka.ftlh
+                    .addObject("vizitka", vizitka); //do modelu se prida objekt vizitka, ktery bude pod timto nazvem dostupny v sablone
 
-        }else{
-            return ResponseEntity.notFound().build();
+        }else{ //vizitka nenalezena
+            return ResponseEntity.notFound().build(); // odpoved se stavem 404
 
         }
     }
+
+    @GetMapping("/nova")//metoda GET reagujici na pozadavku /nova pro zobrazeni formulare
+    public ModelAndView nova() {
+        return new ModelAndView("formular") // zobrazi sablonu formular.ftlh
+                .addObject("vizitka", new Vizitka()); //vytvori novou instanci Vizitka, preda ji do sablony pod nazvem vizitka
+    }
+
+    @PostMapping("/nova") //metoda POST reaguje na /nova
+    public ModelAndView nova(@ModelAttribute Vizitka vizitka) { //prijima parametr Vizitka
+        vizitkaService.pridat(vizitka);
+        return new ModelAndView("redirect:/");
+    }
+
 
 
 
