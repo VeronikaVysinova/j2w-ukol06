@@ -18,14 +18,28 @@ public class VizitkaService {
         this.vizitkaRepository = repository;
     }
 
-    public Vizitka nova(){
-        return new Vizitka();
-    }
 
+    //pridani nove vizitky
     public Vizitka pridat(Vizitka vizitka){
         vizitka.setId(null);
         vizitkaRepository.save(vizitka);
         return vizitka;
+    }
+
+    //uprava vizitky
+    public Vizitka upravit(Vizitka upravenaData) {
+        Vizitka puvodni = vizitkaRepository.findById(upravenaData.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Vizitka nenalezena"));
+
+        puvodni.setCeleJmeno(upravenaData.getCeleJmeno());
+        puvodni.setObec(upravenaData.getObec());
+        puvodni.setPsc(upravenaData.getPsc());
+        puvodni.setFirma(upravenaData.getFirma());
+        puvodni.setEmail(upravenaData.getEmail());
+        puvodni.setTelefon(upravenaData.getTelefon());
+        puvodni.setWeb(upravenaData.getWeb());
+
+        return vizitkaRepository.save(puvodni);
     }
 
     public Optional<Vizitka> detailPodleId(int id) {
@@ -36,6 +50,12 @@ public class VizitkaService {
     public Iterable<Vizitka> seznamVsech(){
         return vizitkaRepository.findAll();
     }
+
+    public void smazat(int id){
+        vizitkaRepository.deleteById(id);
+    }
+
+
 
 
 }

@@ -30,6 +30,19 @@
         </div>
 
         [@c.back /]
-    </div>
+
+        <nav>
+            <a href="/upravit/${vizitka.id}">Upravit vizitku</a>
+
+            <form action="/smazat/${vizitka.id}" method="POST" style="display: inline">
+                <button type="submit">Smazat vizitku</button>
+            </form>
+        </nav>
+
+
+
+
+
+
 [/@c.page]
 

@@ -3,10 +3,12 @@ package cz.czechitas.java2webapps.ukol6.controller;
 
 import cz.czechitas.java2webapps.ukol6.entity.Vizitka;
 import cz.czechitas.java2webapps.ukol6.service.VizitkaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,6 +35,34 @@ public class VizitkaController {
                 .addObject("seznam", vizitkaService.seznamVsech()); // do modelu se prida objekt seznam, ktery zobrazi vsechny dostupne vizitky z databaze
     }
 
+    @GetMapping("/upravit/{id}")
+    public ModelAndView upravitForm(@PathVariable int id) {
+        Vizitka vizitka = vizitkaService.detailPodleId(id)
+                .orElseThrow(()-> new IllegalArgumentException("Vizitka nenalezena."));
+        return new ModelAndView("formular")
+                .addObject("vizitka", vizitka);
+    }
+
+    @PostMapping("/upravit/{id}")
+    public ModelAndView ulozitUpravenou(@PathVariable int id,@Valid @ModelAttribute("vizitka") Vizitka vizitka, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("formular")
+                    .addObject("vizitka", vizitka);
+        }
+
+        vizitkaService.upravit(vizitka);
+
+        return new ModelAndView("redirect:/detail/" + id);
+
+    }
+
+    @PostMapping("/smazat/{id}") //smaze vizitku
+    public ModelAndView smazat(@PathVariable int id) {
+        vizitkaService.smazat(id);
+        return new ModelAndView("redirect:/");
+    }
+
     @GetMapping("/detail/{id}") //URL pozadavek ve formatu /detail/{id}
     public Object detail(@PathVariable int id) { //id se ziska z URL a preda se metode jako cislo
         Optional<Vizitka> optionalVizitka = vizitkaService.detailPodleId(id); //kontejner - obsahuje bud hodnotu nebo je prazdny, vola se sluzba vizitkaService -> vraci Optional<Vizitka>
@@ -54,10 +84,18 @@ public class VizitkaController {
     }
 
     @PostMapping("/nova") //metoda POST reaguje na /nova
-    public ModelAndView nova(@ModelAttribute Vizitka vizitka) { //prijima parametr Vizitka
+    public ModelAndView nova(@Valid @ModelAttribute("vizitka") Vizitka vizitka, BindingResult bindingResult) {//prijima parametr Vizitka
+
+        if(bindingResult.hasErrors()) { //pokud je chyba ve validaci, zobrazi se znovu formular s chybami
+            return new ModelAndView("formular")
+                    .addObject("vizitka", vizitka);
+        }
+        //pokud chyby nejsou, ulozi se do DB
         vizitkaService.pridat(vizitka);
         return new ModelAndView("redirect:/");
     }
+
+
 
 
 

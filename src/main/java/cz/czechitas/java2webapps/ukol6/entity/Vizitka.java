@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.http.client.support.InterceptingHttpAccessor;
 
@@ -16,34 +17,35 @@ public class Vizitka {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Length (max = 100)
-    @NotBlank
+    @Length (max = 100, min = 2, message = "Celé jméno musí mít minimálně 2 znaky a maximálně 100 znaků.")
+    @NotBlank (message = "Celé jméno je povinný údaj.")
     private String celeJmeno;
 
-    @Length (max = 100)
-    @NotBlank
+    @Length (max = 100,  message = "Název firmy nesmí být delší než 100 znaků.")
+    @NotBlank (message = "Firma je povinný údaj.")
     private String firma;
 
-    @Length (max = 100)
-    @NotBlank
+    @Length (max = 100, message = "Název ulice nesmí být delší než 100 znaků.")
+    @NotBlank (message = "Název ulice je povinný údaj.")
     private String ulice;
 
-    @Length (max = 100)
-    @NotBlank
+    @Length (max = 100, message = "Název obce nesmí být delší než 100 znaků.")
+    @NotBlank (message = "Název obce je povinný údaj.")
     private String obec;
 
-    @Length (max = 5)
-    @NotBlank
+    @Pattern(regexp = "\\d{5}", message = "PSČ musí mít přesně 5 číslic.")
+    @NotBlank(message = "Název obce je povinný údaj.")
     private String psc;
 
-    @Length (max = 100)
-    @Email
+    @Length (max = 100, message = "Email nesmí být delší než 100 znaků.")
+    @Email (message = "Email musí mít správný formát.")
     private String email;
 
-    @Length (max = 20)
+    @Length (max = 20, message = "Telefonní číslo nesmí být delší než 20 znaků.")
     private String telefon;
 
-    @Length (max = 100)
+    @Length (max = 100, message = "Web nesmí být delší než 100 znaků.")
+    @Pattern(regexp = "www\\..+")
     private String web;
 
     public String getCelaAdresa(){

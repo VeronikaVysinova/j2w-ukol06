@@ -13,7 +13,7 @@ body {
     color: black;
     margin: 0;
     min-height: 100vh;
-    background: white url(https://source.unsplash.com/ZdiTUdJ3KBU) center center/cover no-repeat;
+    background: deepskyblue url(/images/background.jpg) center center/cover no-repeat;
 }
 
 a {
@@ -91,24 +91,35 @@ form.vizitka {
 }
 
 .detail nav {
-    margin: 1em;
-    font-size: 150%;
+    display: flex;
+    gap: 10px;
 }
 
-.detail nav a {
-    color: white;
+.detail nav a,
+.detail nav button{
+    padding: 15px 25px;
+    font-size: 1.5em;
+    border: 1px solid saddlebrown;
+    border-radius: 5px;
+    text-decoration: none;
+    color: snow;
+    background: #c4a484;
+    transition: background 0.3s, color 0.3s;
 }
 
-.detail nav a:hover {
-    text-decoration: underline;
+.detail nav a:hover,
+.detail nav button:hover{
+    background: beige;
+    color: #4b3621;
+    border-color: #4b3621;
 }
 
 .mapa {
     width: 36em;
     height: 36em;
-    border: 1px solid gray;
+    border: 1px solid saddlebrown;
     margin: 1em;
-    box-shadow: 5px 5px 10px black;
+    box-shadow: 5px 5px 10px #4b3621;
 }
 
 .row {
